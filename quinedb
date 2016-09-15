@@ -18,12 +18,12 @@ print_db(){
     echo "db=("
     i=0
     for k in "${!db[@]}"; do
-        escaped_keys[$i]=$(pr_str "$k")
+        escaped_keys[$i]="$(pr_str "$k")"
         i=$((i+1))
     done
 
     # sort the keys for deterministic printing
-    IFS=$'\n' sorted=($(for l in ${escaped_keys[@]}; do echo $l; done | sort))
+    IFS=$'\n' sorted=($(for l in "${escaped_keys[@]}"; do echo "$l"; done | sort))
     unset IFS
 
     for k in "${sorted[@]}"; do
@@ -55,12 +55,12 @@ print_db(){
     echo "db=("
     i=0
     for k in "${!db[@]}"; do
-        escaped_keys[$i]=$(pr_str "$k")
+        escaped_keys[$i]="$(pr_str "$k")"
         i=$((i+1))
     done
 
     # sort the keys for deterministic printing
-    IFS=$'\n' sorted=($(for l in ${escaped_keys[@]}; do echo $l; done | sort))
+    IFS=$'\n' sorted=($(for l in "${escaped_keys[@]}"; do echo "$l"; done | sort))
     unset IFS
 
     for k in "${sorted[@]}"; do
@@ -95,7 +95,7 @@ print_self(){
 
 case "$1" in
     "get")
-        if [ ${db["$2"]+_} ]; then
+        if [ "${db["$2"]+_}" ]; then
             v=${db["$2"]}
             pr_str "$v" >&2
         fi
@@ -141,7 +141,7 @@ print_self(){
 
 case "$1" in
     "get")
-        if [ ${db["$2"]+_} ]; then
+        if [ "${db["$2"]+_}" ]; then
             v=${db["$2"]}
             pr_str "$v" >&2
         fi

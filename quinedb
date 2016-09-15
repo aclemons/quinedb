@@ -203,7 +203,7 @@ case "$1" in
     "get")
         if [ ${db["$2"]+_} ]; then
             v=${db["$2"]}
-            echo "$(pr_str "$v")" >&2
+            pr_str "$v" >&2
         fi
     ;;
     "set")
@@ -215,7 +215,7 @@ case "$1" in
         echo 'OK' >&2
     ;;
     "keys")
-        for k in "${!db[@]}"; do echo "$(pr_str "$k")"; done >&2
+        for k in "${!db[@]}"; do pr_str "$k"; done >&2
     ;;
     *)
         echo "USAGE: quinedb [get k | set k v | delete k | keys]" >&2
@@ -249,7 +249,7 @@ case "$1" in
     "get")
         if [ ${db["$2"]+_} ]; then
             v=${db["$2"]}
-            echo "$(pr_str "$v")" >&2
+            pr_str "$v" >&2
         fi
     ;;
     "set")
@@ -261,7 +261,7 @@ case "$1" in
         echo 'OK' >&2
     ;;
     "keys")
-        for k in "${!db[@]}"; do echo "$(pr_str "$k")"; done >&2
+        for k in "${!db[@]}"; do pr_str "$k"; done >&2
     ;;
     *)
         echo "USAGE: quinedb [get k | set k v | delete k | keys]" >&2

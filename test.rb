@@ -1,5 +1,6 @@
 # Run this with `ruby test.rb`
 
+require 'tempfile'
 require 'test/unit'
 
 class ILoveOOP < Test::Unit::TestCase
@@ -24,13 +25,11 @@ class ILoveOOP < Test::Unit::TestCase
   end
 
   def pr_str s
-    s2 = ""
-    (0...(s.length)).each{|i|s2 << "\\#{s[i]}"}
-    s2
+    s
   end
 
   def cmd *args
-    args = args.map{|x|pr_str x}.join(" ")
+    args = "'#{args.map{|x|pr_str x}.join("' '")}'"
     `tmp/test/quinedb #{args} > tmp/test/out 2> tmp/test/err`
     `mv tmp/test/out tmp/test/quinedb`
     `chmod +x tmp/test/quinedb`
@@ -39,23 +38,25 @@ class ILoveOOP < Test::Unit::TestCase
     res.strip
   end
 
-  def test_basic_crud
-    assert(cmd("keys") == "")
-    assert(quine?("tmp/test/quinedb"))
-    assert(cmd("set","k","v") == "OK")
-    assert(quine?("tmp/test/quinedb"))
-    assert(cmd("keys") == "k")
-    assert(quine?("tmp/test/quinedb"))
-    assert(cmd("set","k2","v2") == "OK")
-    assert(quine?("tmp/test/quinedb"))
-    assert(cmd("keys").split(/\n/).sort == %w(k k2))
-    assert(cmd("get","k") == "v")
-    assert(cmd("get","k2") == "v2")
-    assert(cmd("delete","k2") == "OK")
-    assert(cmd("get","k2") == "")
-    assert(cmd("get","k") == "v")
-    assert(quine?("tmp/test/quinedb"))
-  end
+  def test_crud
+    [%w(k v k v), %w(ä ß ä ß), %w(* \\ \\* \\\\), ['k', '', 'k', "$''"]].each do |k, v, qk, qv|
+      setup
 
-  # TODO: write some more tests
+      assert(cmd("keys") == "")
+      assert(quine?("tmp/test/quinedb"))
+      assert(cmd("set", k, v) == "OK")
+      assert(quine?("tmp/test/quinedb"))
+      assert(cmd("keys") == qk)
+      assert(quine?("tmp/test/quinedb"))
+      assert(cmd("set", "#{k}2", "#{v}2") == "OK")
+      assert(quine?("tmp/test/quinedb"))
+      assert(cmd("keys").split(/\n/).sort == %W(#{qk} #{qk}2))
+      assert(cmd("get", k) == qv)
+      assert(cmd("get", "#{k}2") == "#{qv.gsub("$''","")}2")
+      assert(cmd("delete", "#{k}2") == "OK")
+      assert(cmd("get", "#{qk}2") == "")
+      assert(cmd("get", k) == qv)
+      assert(quine?("tmp/test/quinedb"))
+    end
+  end
 end

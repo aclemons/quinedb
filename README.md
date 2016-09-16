@@ -85,8 +85,12 @@ a missing key.
 
 ``` shell
 $ qdb set \
-  $'this\nkey\nhas\nfour\nlines' \
-  $'and the \'value\' has \"quotes\"'
+  'this
+key
+has
+four
+lines' \
+  "and the 'value' has \"quotes\""
 OK
 
 $ qdb set empty ''
@@ -96,8 +100,12 @@ $ qdb keys
 $'this\nkey\nhas\nfour\nlines'
 empty
 
-$ qdb get $'this\nkey\nhas\nfour\nlines'
-$'and the \'value\' has \"quotes\"'
+$ qdb get 'this
+key
+has
+four
+lines'
+and\ the\ \'value\'\ has\ \"quotes\"
 
 $ qdb get empty
 $''
@@ -116,7 +124,7 @@ chain operations by redirecting `STDOUT` to an invocation of
 $ ./quinedb set k1 v1 | \
 /usr/bin/env bash -s set k2 v2 | \
 /usr/bin/env bash -s set k3 v3 | \
-/usr/bin/env bash -s keys > tmp; chmod +x tmp; mv tmp quinedb
+/usr/bin/env bash -s keys > tmp; cat tmp > quinedb
 OK
 OK
 OK

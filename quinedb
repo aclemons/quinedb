@@ -11,60 +11,7 @@ db=(
 )
 
 pr_str () {
-    s="$1"
-    if [[ "$s" =~ ^[-a-zA-Z0-9]+$ ]]; then
-        echo "$s"
-    else
-        ret=\$\'
-        for (( i=0; i<${#s}; i++ )); do
-            c="${s:$i:1}"
-            if [[ "$c" =~ [-_a-zA-Z0-9\ ] ]]; then
-                ret="${ret}$c"
-            else
-                case "$c" in
-                    $'\a')
-                        ret="${ret}\\a"
-                    ;;
-                    $'\b')
-                        ret="${ret}\\b"
-                    ;;
-                    $'\e')
-                        ret="${ret}\\e"
-                    ;;
-                    $'\E')
-                        ret="${ret}\\E"
-                    ;;
-                    $'\f')
-                        ret="${ret}\\f"
-                    ;;
-                    $'\n')
-                        ret="${ret}\\n"
-                    ;;
-                    $'\r')
-                        ret="${ret}\\r"
-                    ;;
-                    $'\t')
-                        ret="${ret}\\t"
-                    ;;
-                    $'\v')
-                        ret="${ret}\\v"
-                    ;;
-                    $'\\')
-                        ret="${ret}\\\\"
-                    ;;
-                    $'\'')
-                        ret="${ret}\\"\'
-                    ;;
-                    $'\"')
-                        ret="${ret}\\"\"
-                    ;;
-                    else)
-                        ret="${ret}\\$c"
-                esac
-            fi
-        done
-        echo "${ret}"\'
-    fi
+    printf "%q\n" "$1" | sed "s/^''$/$''/"
 }
 
 print_db(){
@@ -101,60 +48,7 @@ EOF
 
 SEC2=$(cat <<'EOF'
 pr_str () {
-    s="$1"
-    if [[ "$s" =~ ^[-a-zA-Z0-9]+$ ]]; then
-        echo "$s"
-    else
-        ret=\$\'
-        for (( i=0; i<${#s}; i++ )); do
-            c="${s:$i:1}"
-            if [[ "$c" =~ [-_a-zA-Z0-9\ ] ]]; then
-                ret="${ret}$c"
-            else
-                case "$c" in
-                    $'\a')
-                        ret="${ret}\\a"
-                    ;;
-                    $'\b')
-                        ret="${ret}\\b"
-                    ;;
-                    $'\e')
-                        ret="${ret}\\e"
-                    ;;
-                    $'\E')
-                        ret="${ret}\\E"
-                    ;;
-                    $'\f')
-                        ret="${ret}\\f"
-                    ;;
-                    $'\n')
-                        ret="${ret}\\n"
-                    ;;
-                    $'\r')
-                        ret="${ret}\\r"
-                    ;;
-                    $'\t')
-                        ret="${ret}\\t"
-                    ;;
-                    $'\v')
-                        ret="${ret}\\v"
-                    ;;
-                    $'\\')
-                        ret="${ret}\\\\"
-                    ;;
-                    $'\'')
-                        ret="${ret}\\"\'
-                    ;;
-                    $'\"')
-                        ret="${ret}\\"\"
-                    ;;
-                    else)
-                        ret="${ret}\\$c"
-                esac
-            fi
-        done
-        echo "${ret}"\'
-    fi
+    printf "%q\n" "$1" | sed "s/^''$/$''/"
 }
 
 print_db(){
